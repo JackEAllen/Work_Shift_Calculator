@@ -1,7 +1,7 @@
 ---
 name: Generic Issue Template
 about: Should be used for all issues and tickets
-title: '[TOPIC: [Brief description of issue]'
+title: '[TOPIC]: [Brief description of issue]'
 labels: ''
 assignees: ''
 
