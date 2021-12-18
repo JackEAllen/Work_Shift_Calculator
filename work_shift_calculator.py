@@ -1,4 +1,9 @@
 """
+LICENCING
+Copyright (c) 2021, Jack Allen, [JackEAllen](https://github.com/JackEAllen)
+
+All rights reserved under the GNU GENERAL PUBLIC LICENSE Version 3 or later.
+
 A small script to calculate time spent working in a given time period.
 This script was made to make my life easier when working from home as
 my brain is usually too tired to do simple maths at hte ed of the day
@@ -53,7 +58,7 @@ class WorkShiftCalculator:
         @return: The time spent working in a given time period without lunch break.
         """
         lunch = self.extract_lunch_break_time_to_minutes()
-        time_spent_working = self.calc_time_without_break - datetime.timedelta(minutes=lunch)
+        time_spent_working = self.calc_time_without_break() - datetime.timedelta(minutes=lunch)
         return time_spent_working
 
     @staticmethod
