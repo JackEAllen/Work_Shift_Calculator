@@ -1,7 +1,12 @@
 """
+LICENCING
+Copyright (c) 2021, Jack Allen, [JackEAllen](https://github.com/JackEAllen)
+
+All rights reserved under the GNU GENERAL PUBLIC LICENSE Version 3 or later.
+
 A small script to calculate time spent working in a given time period.
-This script was made to make my life easier when working from home as 
-my brain is usually too tired to do simple maths at hte ed of the day 
+This script was made to make my life easier when working from home as
+my brain is usually too tired to do simple maths at hte ed of the day
 to track time spent working
 
 This script uses 24 hour time format.
@@ -27,7 +32,7 @@ class WorkShiftCalculator:
         self.lunch_break = self.convert_input_to_datetime("lunch break")
         self.end_time = self.convert_input_to_datetime("end time")
 
-    def calculate_time_spent_working_without_lunch_break(self) -> datetime.datetime:
+    def calc_time_without_break(self) -> datetime.datetime:
         """
         Calculate the time spent working in a given time period.
         @return: The time spent working in a given time period.
@@ -42,21 +47,22 @@ class WorkShiftCalculator:
         @return: The lunch break time in minutes.
         """
         lunch = datetime.datetime.strptime(str(self.lunch_break), '%Y-%m-%d %H:%M:%S').time()
-        hh, mm, ss = str(lunch).split(":")
+        hour, minute, _ = str(lunch).split(":")
 
-        lunch_break_time_in_minutes = (int(hh) * 60) + (int(mm))
+        lunch_break_time_in_minutes = (int(hour) * 60) + (int(minute))
         return lunch_break_time_in_minutes
-    
-    def calculate_time_spent_working_with_lunch_break(self) -> datetime.datetime:
+
+    def calc_time_with_lunch_break(self) -> datetime.datetime:
         """
         Calculate the time spent working in a given time period without lunch break.
         @return: The time spent working in a given time period without lunch break.
         """
         lunch = self.extract_lunch_break_time_to_minutes()
-        time_spent_working = self.calculate_time_spent_working_without_lunch_break() - datetime.timedelta(minutes=lunch)
+        time_spent_working = self.calc_time_without_break() - datetime.timedelta(minutes=lunch)
         return time_spent_working
-       
-    def convert_input_to_datetime(self, booking:str) -> datetime.datetime:
+
+    @staticmethod
+    def convert_input_to_datetime(booking: str) -> datetime.datetime:
         """
         Convert the input time to datetime format.
         @param input_time: The input time to be converted.
@@ -83,8 +89,8 @@ def main():
     print(f"Start Time: {workshift.start_time.time()}")
     print(f"Lunch Break: {workshift.lunch_break.time()}")
     print(f"End Time: {workshift.end_time.time()}")
-    print(f"Time worked excluding break: {workshift.calculate_time_spent_working_without_lunch_break()}")
-    print(f"Time worked including break: {workshift.calculate_time_spent_working_with_lunch_break()}")
+    print(f"Time worked excluding break: {workshift.calc_time_without_break()}")
+    print(f"Time worked including break: {workshift.calc_time_with_lunch_break()}")
 
 
 if __name__ == "__main__":
