@@ -61,6 +61,19 @@ class WorkShiftCalculator:
         time_spent_working = self.calc_time_without_break() - datetime.timedelta(minutes=lunch)
         return time_spent_working
 
+    
+    ## A function which calculate the surplus time worked in a given time period.
+    def surplus_time(self) -> datetime.datetime:
+        """
+        Calculate the surplus time worked in a given time period compared to 07:30:00.
+        @return: The surplus time worked in a given time period.
+        """
+        time_spent_working_with_lunch_break = self.calc_time_with_lunch_break()
+        surplus_time = time_spent_working_with_lunch_break - datetime.timedelta(hours=7, minutes=30)
+        time_in_minutes = surplus_time.total_seconds() / 60
+        return time_in_minutes
+        
+
     @staticmethod
     def convert_input_to_datetime(booking: str) -> datetime.datetime:
         """
@@ -91,6 +104,7 @@ def main():
     print(f"End Time: {workshift.end_time.time()}")
     print(f"Time worked excluding break: {workshift.calc_time_without_break()}")
     print(f"Time worked including break: {workshift.calc_time_with_lunch_break()}")
+    print(f"Surplus time in minutes: {workshift.surplus_time()}")
 
 
 if __name__ == "__main__":
