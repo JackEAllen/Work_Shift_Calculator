@@ -6,8 +6,12 @@ labels: ''
 assignees: ''
 
 ---
-### Description	of problem:
+
 As a: [developer/user/project requirement]
+
+### Description	of problem:
+
+
 _What is the problem?_
 
 ### Acceptance Criteria
