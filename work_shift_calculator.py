@@ -19,6 +19,9 @@ copyright (c) 2021, Jack Allen JackEAllen
 import sys
 import datetime
 import re
+from time import time
+
+import utils
 
 class WorkShiftCalculator:
     """
@@ -73,6 +76,17 @@ class WorkShiftCalculator:
             return '-' + str(datetime.timedelta() - surplus_time)
         return surplus_time
 
+    def calculate_total_surplus_time(self) -> datetime.datetime.time:
+        """
+        Calculate the total surplus time.
+        @return: The total surplus time.
+        """
+
+        previous_surplus = utils.get_most_recent_surplus_time_value_from_csv("time_spent_working.csv")
+        time_delta_surplus = datetime.datetime.combine(datetime.date.min, previous_surplus) - datetime.datetime.min
+        total_surplus = time_delta_surplus + self.surplus_time()
+        return total_surplus
+
     @staticmethod
     def convert_input_to_datetime(booking: str) -> datetime.datetime:
         """
@@ -89,6 +103,44 @@ class WorkShiftCalculator:
         time = datetime.datetime.strptime(input_time, '%H:%M')
         return time
 
+    def get_current_date(self) -> datetime.datetime:
+        """
+        Get the current date.
+        @return: The current date.
+        """
+        return datetime.date.today()
+
+    def format_data(self) -> str:
+        """
+        Format the data to be written to the csv file.
+        @return: The formatted data.
+        """
+        time_spent_working_with_lunch_break = self.calc_time_with_lunch_break()
+        surplus_time = self.surplus_time()
+        time_spent_working_without_lunch_break = self.calc_time_without_break()
+        time_spent_working_with_lunch_break = self.calc_time_with_lunch_break()
+        time_data = [self.start_time, self.lunch_break, self.end_time, time_spent_working_without_lunch_break, time_spent_working_with_lunch_break, surplus_time, self.calculate_total_surplus_time()]
+        formatted_data = ', '.join(map(str, time_data))
+        return formatted_data
+        # return time_data
+
+
+    def create_dictionary(self) -> dict:
+        """
+        Create a dictionary with the data to be written to the csv file.
+        @return: The dictionary.
+        """
+        date = self.get_current_date()
+        dictionary = {"Date": date, 
+        "start": self.start_time.time(), 
+        "Lunch": self.lunch_break.time(), 
+        "end": self.end_time.time(),
+        "Time without Lunch": self.calc_time_without_break(),
+        "Time With Lunch": self.calc_time_with_lunch_break(),
+        "Surplus Time": self.surplus_time(),
+        "Total Surplus": self.calculate_total_surplus_time()}
+        return dictionary
+
 
 
 def main():
@@ -97,13 +149,16 @@ def main():
     """
 
     workshift = WorkShiftCalculator()
-
+    print("Previous Surplus Time: " + str(utils.get_most_recent_surplus_time_value_from_csv("time_spent_working.csv")))
     print(f"Start Time: {workshift.start_time.time()}")
     print(f"Lunch Break: {workshift.lunch_break.time()}")
     print(f"End Time: {workshift.end_time.time()}")
     print(f"Time worked excluding break: {workshift.calc_time_without_break()}")
     print(f"Time worked including break: {workshift.calc_time_with_lunch_break()}")
     print(f"Surplus time: {workshift.surplus_time()}")
+    print(f"Total Surplus time: {workshift.calculate_total_surplus_time()}")
+
+    utils.write_dictionary_to_csv("time_spent_working.csv", workshift.create_dictionary())
 
 
 if __name__ == "__main__":
