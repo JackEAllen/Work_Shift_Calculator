@@ -149,7 +149,7 @@ def main():
     """
 
     workshift = WorkShiftCalculator()
-    print("Previous Surplus Time: " + str(utils.get_most_recent_surplus_time_value_from_csv("time_spent_working.csv")))
+    # print("Previous Surplus Time: " + str(utils.get_most_recent_surplus_time_value_from_csv("time_spent_working.csv")))
     print(f"Start Time: {workshift.start_time.time()}")
     print(f"Lunch Break: {workshift.lunch_break.time()}")
     print(f"End Time: {workshift.end_time.time()}")

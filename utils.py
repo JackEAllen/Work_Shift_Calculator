@@ -18,6 +18,16 @@ def list_dictionary_keys(dictionary: dict) -> list:
 		keys.append(str(key))
 	return keys
 
+def create_csv_file(file_name: str):
+	"""
+	Create a csv file.
+	@param file_name: The name of the file.
+	"""
+
+	with open(file_name, 'w', newline='') as csv_file:
+		csvwriter = csv.writer(csv_file)
+		csvwriter.writerow(["Date", "Time", "Surplus Time"])
+
 # A function to write a dictionary to a csv file.
 def write_dictionary_to_csv(file_name: str, dictionary: dict):
 	"""
@@ -74,13 +84,17 @@ def get_most_recent_surplus_time_value_from_csv(file_name: str) -> int:
 	@return: The most recent surplus time value.
 	"""
 
-	with open(file_name, "r", encoding="utf-8", errors="ignore") as scraped:
-		if len(list(scraped)) > 1:
-			final_line = scraped.readlines()[-1].split(",")[-1].strip()
-			return convert_string_to_time(final_line)
-		else: 
-			no_time = "00:00:00"
-			return convert_string_to_time(no_time)
+	if check_if_file_exists(file_name):
+		with open(file_name, "r", encoding="utf-8", errors="ignore") as scraped:
+			if len(list(scraped)) > 1:
+				final_line = scraped.readlines()[-1].split(",")[-1].strip()
+				return convert_string_to_time(final_line)
+			else: 
+				no_time = "00:00:00"
+				return convert_string_to_time(no_time)
+	else:
+		no_time = "00:00:00"
+		return convert_string_to_time(no_time)
 		
 		
 # 		writer = csv.writer(csv_file)
